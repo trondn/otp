@@ -72,6 +72,7 @@ fin_per_testcase(_Case, Config) ->
 start_bin(suite) -> [];
 start_bin(Config) when is_list(Config) ->
     OldFl = process_flag(trap_exit, true),
+    ?line filename:dirname(code:which(?MODULE)),
 
     %% Binary data stream...
     BinExample = <<"short stream">>,
@@ -192,6 +193,7 @@ start_bin(Config) when is_list(Config) ->
 start_link_bin(suite) -> [];
 start_link_bin(Config) when is_list(Config) ->
     OldFl = process_flag(trap_exit, true),
+    ?line filename:dirname(code:which(?MODULE)),
 
     %% Binary data stream...
     BinExample = <<"binary data">>,
@@ -312,6 +314,7 @@ start_link_bin(Config) when is_list(Config) ->
 bad_calls(suite) -> [];
 bad_calls(Config) when is_list(Config) ->
     OldFl = process_flag(trap_exit, true),
+    ?line filename:dirname(code:which(?MODULE)),
 
     %% Binary data stream...
     BinExample = <<"Unused data">>,
@@ -335,6 +338,7 @@ bad_calls(Config) when is_list(Config) ->
 stream_info_bin(suite) -> [];
 stream_info_bin(Config) when is_list(Config) ->
     OldFl = process_flag(trap_exit, true),
+    ?line filename:dirname(code:which(?MODULE)),
 
     %% Binary data stream...
     BinExample = <<"1234567890123456">>,
@@ -382,6 +386,7 @@ stream_info_bin(Config) when is_list(Config) ->
 stream_info_file(suite) -> [];
 stream_info_file(Config) when is_list(Config) ->
     OldFl = process_flag(trap_exit, true),
+    ?line filename:dirname(code:which(?MODULE)),
 
     %% Binary data stream...
     FileExample = test_file_path(Config, "alpha.txt"),
@@ -448,6 +453,7 @@ stream_info_file(Config) when is_list(Config) ->
 stream_info_module(suite) -> [];
 stream_info_module(Config) when is_list(Config) ->
     OldFl = process_flag(trap_exit, true),
+    ?line filename:dirname(code:which(?MODULE)),
 
     %% Fixed length data stream...
     ModSize = 20,
@@ -517,6 +523,7 @@ stream_info_module(Config) when is_list(Config) ->
 num_procs_bin(suite) -> [];
 num_procs_bin(Config) when is_list(Config) ->
     OldFl = process_flag(trap_exit, true),
+    ?line filename:dirname(code:which(?MODULE)),
 
     %% Binary data stream...
     BinExample = <<"1234567890123456">>,
@@ -541,6 +548,7 @@ num_procs_bin(Config) when is_list(Config) ->
 num_procs_file(suite) -> [];
 num_procs_file(Config) when is_list(Config) ->
     OldFl = process_flag(trap_exit, true),
+    ?line filename:dirname(code:which(?MODULE)),
 
     %% File data stream...
     FileExample = test_file_path(Config, "alpha.txt"),
@@ -565,6 +573,7 @@ num_procs_file(Config) when is_list(Config) ->
 num_procs_module(suite) -> [];
 num_procs_module(Config) when is_list(Config) ->
     OldFl = process_flag(trap_exit, true),
+    ?line filename:dirname(code:which(?MODULE)),
 
     %% Behaviour data stream...
     ModExampleSize = 64,
@@ -590,6 +599,7 @@ num_procs_module(Config) when is_list(Config) ->
 num_buffers_bin(suite) -> [];
 num_buffers_bin(Config) when is_list(Config) ->
     OldFl = process_flag(trap_exit, true),
+    ?line filename:dirname(code:which(?MODULE)),
 
     %% Binary data stream...
     BinExample = list_to_binary(lists:duplicate(6,<<"1234567890">>)),
@@ -618,6 +628,7 @@ num_buffers_bin(Config) when is_list(Config) ->
 num_buffers_file(suite) -> [];
 num_buffers_file(Config) when is_list(Config) ->
     OldFl = process_flag(trap_exit, true),
+    ?line filename:dirname(code:which(?MODULE)),
 
     %% File data stream...
     FileExample = test_file_path(Config, "alpha.txt"),
@@ -646,6 +657,7 @@ num_buffers_file(Config) when is_list(Config) ->
 num_buffers_module(suite) -> [];
 num_buffers_module(Config) when is_list(Config) ->
     OldFl = process_flag(trap_exit, true),
+    ?line filename:dirname(code:which(?MODULE)),
 
     %% Binary data stream...
     ModExampleSize = 240,
@@ -675,6 +687,7 @@ num_buffers_module(Config) when is_list(Config) ->
 block_buffers_bin(suite) -> [];
 block_buffers_bin(Config) when is_list(Config) ->
     OldFl = process_flag(trap_exit, true),
+    ?line filename:dirname(code:which(?MODULE)),
 
     %% Binary data stream...
     BinExample = list_to_binary(lists:duplicate(6,<<"1234567890">>)),
@@ -727,6 +740,7 @@ block_buffers_bin(Config) when is_list(Config) ->
 block_buffers_file(suite) -> [];
 block_buffers_file(Config) when is_list(Config) ->
     OldFl = process_flag(trap_exit, true),
+    ?line filename:dirname(code:which(?MODULE)),
 
     %% File data stream...
     FilePath = test_file_path(Config, "alpha.txt"),
@@ -761,6 +775,7 @@ block_buffers_file(Config) when is_list(Config) ->
 block_buffers_module(suite) -> [];
 block_buffers_module(Config) when is_list(Config) ->
     OldFl = process_flag(trap_exit, true),
+    ?line filename:dirname(code:which(?MODULE)),
 
     %% Behaviour data stream...
     ModBin = odd_bin([N || N <- lists:seq(1,120), N rem 2 =:= 1]),
@@ -819,6 +834,7 @@ block_buffers_module(Config) when is_list(Config) ->
 circular_mult_bin(suite) -> [];
 circular_mult_bin(Config) when is_list(Config) ->
     OldFl = process_flag(trap_exit, true),
+    ?line filename:dirname(code:which(?MODULE)),
 
     BinSmall6 = <<"123456789012345678">>,
     BinOpts3a = [{stream_type, {binary,BinSmall6}}, {chunk_size,3},
@@ -844,6 +860,7 @@ circular_mult_bin(Config) when is_list(Config) ->
 circular_non_mult_bin(suite) -> [];
 circular_non_mult_bin(Config) when is_list(Config) ->
     OldFl = process_flag(trap_exit, true),
+    ?line filename:dirname(code:which(?MODULE)),
 
     BinSmall5 = <<"12345">>,
     BinOpts4a = [{stream_type, {binary,BinSmall5}}, {chunk_size,4},
@@ -869,6 +886,7 @@ circular_non_mult_bin(Config) when is_list(Config) ->
 circular_replicated_bin(suite) -> [];
 circular_replicated_bin(Config) when is_list(Config) ->
     OldFl = process_flag(trap_exit, true),
+    ?line filename:dirname(code:which(?MODULE)),
 
     BinSmall5 = <<"12345">>,
     BinOpts8a = [{stream_type, {binary,BinSmall5}}, {chunk_size,8},
@@ -898,6 +916,7 @@ circular_replicated_bin(Config) when is_list(Config) ->
 circular_mult_file(suite) -> [];
 circular_mult_file(Config) when is_list(Config) ->
     OldFl = process_flag(trap_exit, true),
+    ?line filename:dirname(code:which(?MODULE)),
 
     FilePath = test_file_path(Config, "alpha.txt"),
     FileOpts19a = [{stream_type, {file, FilePath}}, {chunk_size, 19},
@@ -923,6 +942,7 @@ circular_mult_file(Config) when is_list(Config) ->
 circular_non_mult_file(suite) -> [];
 circular_non_mult_file(Config) when is_list(Config) ->
     OldFl = process_flag(trap_exit, true),
+    ?line filename:dirname(code:which(?MODULE)),
 
     FilePath = test_file_path(Config, "alpha.txt"),
     BinOpts14a = [{stream_type, {file, FilePath}}, {chunk_size,14},
@@ -948,6 +968,7 @@ circular_non_mult_file(Config) when is_list(Config) ->
 circular_replicated_file(suite) -> [];
 circular_replicated_file(Config) when is_list(Config) ->
     OldFl = process_flag(trap_exit, true),
+    ?line filename:dirname(code:which(?MODULE)),
 
     FilePath = test_file_path(Config, "alpha.txt"),
     BinOpts60a = [{stream_type, {file, FilePath}}, {chunk_size,60},
@@ -978,6 +999,7 @@ circular_replicated_file(Config) when is_list(Config) ->
 circular_mult_module(suite) -> [];
 circular_mult_module(Config) when is_list(Config) ->
     OldFl = process_flag(trap_exit, true),
+    ?line filename:dirname(code:which(?MODULE)),
 
     BinSize = 18*4,
     BinOpts3a = [{stream_type, {behaviour, gen_stream_odd_nums,
@@ -1007,6 +1029,7 @@ circular_mult_module(Config) when is_list(Config) ->
 circular_non_mult_module(suite) -> [];
 circular_non_mult_module(Config) when is_list(Config) ->
     OldFl = process_flag(trap_exit, true),
+    ?line filename:dirname(code:which(?MODULE)),
 
     BinSize = 5*4,
     BinOpts4a = [{stream_type, {behaviour, gen_stream_odd_nums,
@@ -1036,6 +1059,7 @@ circular_non_mult_module(Config) when is_list(Config) ->
 circular_replicated_module(suite) -> [];
 circular_replicated_module(Config) when is_list(Config) ->
     OldFl = process_flag(trap_exit, true),
+    ?line filename:dirname(code:which(?MODULE)),
 
     BinSize = 5*4,
     BinOpts8a = [{stream_type, {behaviour, gen_stream_odd_nums,
@@ -1060,6 +1084,7 @@ circular_replicated_module(Config) when is_list(Config) ->
      || Opts <- [BinOpts8a, BinOpts8b, BinOpts8c]],
 
     process_flag(trap_exit, OldFl),
+    ?line filename:dirname(code:which(?MODULE)),
     ok.
 
 
