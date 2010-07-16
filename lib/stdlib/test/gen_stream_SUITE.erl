@@ -1119,10 +1119,11 @@ info_stream(Pid, ExpSize, ExpPos, ExpPct) ->
     {pct_complete, ExpPct} = gen_stream:pct_complete(Pid).
 
 proc_info(NumProcs, BinSize, BinOpts, Xfn) ->
-    OldProcCount = erlang:system_info(process_count),
-    ExpectedProcCount = OldProcCount + NumProcs + 1,
     ?line {ok, Pid} = gen_stream:start(create_opts(BinOpts, Xfn)),
-    ?line ExpectedProcCount = erlang:system_info(process_count),
+    ?line {proc_info, [{requested, R}, {active, A}, {pids, P}]} =
+	gen_stream:proc_info(Pid),
+    ?line NumProcs = R,
+    ?line NumProcs = A,
 
     ?line {stream_size, BinSize} = gen_stream:stream_size(Pid),
     ?line {stream_pos, 0} = gen_stream:stream_pos(Pid),
@@ -1135,17 +1136,19 @@ proc_info(NumProcs, BinSize, BinOpts, Xfn) ->
     ?line info_chunk(Pid, BinSize, end_of_stream, 16, 100, Xfn),
     ?line info_chunk(Pid, BinSize, end_of_stream, 16, 100, Xfn),
 
-    ?line OldProcCount = erlang:system_info(process_count) - 1,
+    ?line {proc_info, [{requested, R}, {active, 0}, {pids, P}]} =
+	gen_stream:proc_info(Pid),
+
     ?line stopped = gen_stream:stop(Pid),
     ?line busy_wait_for_process_to_end(Pid, 600),
-    ?line {'EXIT', {noproc,_}} = (catch gen_stream:stream_size(Pid)),
-    ?line OldProcCount = erlang:system_info(process_count).
+    ?line {'EXIT', {noproc,_}} = (catch gen_stream:stream_size(Pid)).
 
 proc_file_info(NumProcs, FileSize, FileOpts, Xfn) ->
-    OldProcCount = erlang:system_info(process_count),
-    ExpectedProcCount = OldProcCount + NumProcs + 1,
     ?line {ok, Pid} = gen_stream:start(create_opts(FileOpts, Xfn)),
-    ?line ExpectedProcCount = erlang:system_info(process_count),
+    ?line {proc_info, [{requested, R}, {active, A}, {pids, P}]} =
+	gen_stream:proc_info(Pid),
+    ?line NumProcs = R,
+    ?line NumProcs = A,
 
     ?line {stream_size, FileSize} = gen_stream:stream_size(Pid),
     ?line {stream_pos, 0} = gen_stream:stream_pos(Pid),
@@ -1164,17 +1167,19 @@ proc_file_info(NumProcs, FileSize, FileOpts, Xfn) ->
     ?line info_chunk(Pid, FileSize, end_of_stream, 38, 100, Xfn),
     ?line info_chunk(Pid, FileSize, end_of_stream, 38, 100, Xfn),
 
-    ?line OldProcCount = erlang:system_info(process_count) - 1,
+    ?line {proc_info, [{requested, R}, {active, 0}, {pids, P}]} =
+	gen_stream:proc_info(Pid),
+
     ?line stopped = gen_stream:stop(Pid),
     ?line busy_wait_for_process_to_end(Pid, 600),
-    ?line {'EXIT', {noproc,_}} = (catch gen_stream:stream_size(Pid)),
-    ?line OldProcCount = erlang:system_info(process_count).
+    ?line {'EXIT', {noproc,_}} = (catch gen_stream:stream_size(Pid)).
 
 proc_mod_info(NumProcs, ModSize, ModOpts, Xfn) ->
-    OldProcCount = erlang:system_info(process_count),
-    ExpectedProcCount = OldProcCount + NumProcs + 1,
     ?line {ok, Pid} = gen_stream:start(create_opts(ModOpts, Xfn)),
-    ?line ExpectedProcCount = erlang:system_info(process_count),
+    ?line {proc_info, [{requested, R}, {active, A}, {pids, P}]} =
+	gen_stream:proc_info(Pid),
+    ?line NumProcs = R,
+    ?line NumProcs = A,
 
     ?line {stream_size, ModSize} = gen_stream:stream_size(Pid),
     ?line {stream_pos, 0} = gen_stream:stream_pos(Pid),
@@ -1188,17 +1193,19 @@ proc_mod_info(NumProcs, ModSize, ModOpts, Xfn) ->
     ?line info_chunk(Pid, ModSize, end_of_stream, 64, 100, Xfn),
     ?line info_chunk(Pid, ModSize, end_of_stream, 64, 100, Xfn),
 
-    ?line OldProcCount = erlang:system_info(process_count) - 1,
+    ?line {proc_info, [{requested, R}, {active, 0}, {pids, P}]} =
+	gen_stream:proc_info(Pid),
+
     ?line stopped = gen_stream:stop(Pid),
     ?line busy_wait_for_process_to_end(Pid, 600),
-    ?line {'EXIT', {noproc,_}} = (catch gen_stream:stream_size(Pid)),
-    ?line OldProcCount = erlang:system_info(process_count).
+    ?line {'EXIT', {noproc,_}} = (catch gen_stream:stream_size(Pid)).
 
 buffer_info(NumProcs, BinSize, BinOpts, Xfn) ->
-    OldProcCount = erlang:system_info(process_count),
-    ExpectedProcCount = OldProcCount + NumProcs + 1,
     ?line {ok, Pid} = gen_stream:start(create_opts(BinOpts, Xfn)),
-    ?line ExpectedProcCount = erlang:system_info(process_count),
+    ?line {proc_info, [{requested, R}, {active, A}, {pids, P}]} =
+	gen_stream:proc_info(Pid),
+    ?line NumProcs = R,
+    ?line NumProcs = A,
 
     ?line {stream_size, BinSize} = gen_stream:stream_size(Pid),
     ?line {stream_pos, 0} = gen_stream:stream_pos(Pid),
@@ -1219,17 +1226,19 @@ buffer_info(NumProcs, BinSize, BinOpts, Xfn) ->
     ?line info_chunk(Pid, BinSize, end_of_stream,  60, 100, Xfn),
     ?line info_chunk(Pid, BinSize, end_of_stream,  60, 100, Xfn),
 
-    ?line OldProcCount = erlang:system_info(process_count) - 1,
+    ?line {proc_info, [{requested, R}, {active, 0}, {pids, P}]} =
+	gen_stream:proc_info(Pid),
+
     ?line stopped = gen_stream:stop(Pid),
     ?line busy_wait_for_process_to_end(Pid, 600),
-    ?line {'EXIT', {noproc,_}} = (catch gen_stream:stream_size(Pid)),
-    ?line OldProcCount = erlang:system_info(process_count).
+    ?line {'EXIT', {noproc,_}} = (catch gen_stream:stream_size(Pid)).
 
 buffer_file_info(NumProcs, FileSize, FileOpts, Xfn) ->
-    OldProcCount = erlang:system_info(process_count),
-    ExpectedProcCount = OldProcCount + NumProcs + 1,
     ?line {ok, Pid} = gen_stream:start(create_opts(FileOpts, Xfn)),
-    ?line ExpectedProcCount = erlang:system_info(process_count),
+    ?line {proc_info, [{requested, R}, {active, A}, {pids, P}]} =
+	gen_stream:proc_info(Pid),
+    ?line NumProcs = R,
+    ?line NumProcs = A,
 
     ?line {stream_size, FileSize} = gen_stream:stream_size(Pid),
     ?line {stream_pos, 0} = gen_stream:stream_pos(Pid),
@@ -1246,17 +1255,19 @@ buffer_file_info(NumProcs, FileSize, FileOpts, Xfn) ->
     ?line info_chunk(Pid, FileSize, end_of_stream, 38, 100, Xfn),
     ?line info_chunk(Pid, FileSize, end_of_stream, 38, 100, Xfn),
 
-    ?line OldProcCount = erlang:system_info(process_count) - 1,
+    ?line {proc_info, [{requested, R}, {active, 0}, {pids, P}]} =
+	gen_stream:proc_info(Pid),
+
     ?line stopped = gen_stream:stop(Pid),
     ?line busy_wait_for_process_to_end(Pid, 600),
-    ?line {'EXIT', {noproc,_}} = (catch gen_stream:stream_size(Pid)),
-    ?line OldProcCount = erlang:system_info(process_count).
+    ?line {'EXIT', {noproc,_}} = (catch gen_stream:stream_size(Pid)).
 
 buffer_mod_info(NumProcs, ModSize, ModOpts, Xfn) ->
-    OldProcCount = erlang:system_info(process_count),
-    ExpectedProcCount = OldProcCount + NumProcs + 1,
     ?line {ok, Pid} = gen_stream:start(create_opts(ModOpts, Xfn)),
-    ?line ExpectedProcCount = erlang:system_info(process_count),
+    ?line {proc_info, [{requested, R}, {active, A}, {pids, P}]} =
+	gen_stream:proc_info(Pid),
+    ?line NumProcs = R,
+    ?line NumProcs = A,
 
     ?line {stream_size, ModSize} = gen_stream:stream_size(Pid),
     ?line {stream_pos, 0} = gen_stream:stream_pos(Pid),
@@ -1277,17 +1288,19 @@ buffer_mod_info(NumProcs, ModSize, ModOpts, Xfn) ->
     ?line info_chunk(Pid, ModSize, end_of_stream, 240, 100, Xfn),
     ?line info_chunk(Pid, ModSize, end_of_stream, 240, 100, Xfn),
 
-    ?line OldProcCount = erlang:system_info(process_count) - 1,
+    ?line {proc_info, [{requested, R}, {active, 0}, {pids, P}]} =
+	gen_stream:proc_info(Pid),
+
     ?line stopped = gen_stream:stop(Pid),
     ?line busy_wait_for_process_to_end(Pid, 600),
-    ?line {'EXIT', {noproc,_}} = (catch gen_stream:stream_size(Pid)),
-    ?line OldProcCount = erlang:system_info(process_count).
+    ?line {'EXIT', {noproc,_}} = (catch gen_stream:stream_size(Pid)).
 
 block_buffer_info(NumProcs, ChunkBlockSize, BinSize, Bin, BinOpts, Xfn) ->
-    OldProcCount = erlang:system_info(process_count),
-    ExpectedProcCount = OldProcCount + NumProcs + 1,
     ?line {ok, Pid} = gen_stream:start(create_opts(BinOpts, Xfn)),
-    ?line ExpectedProcCount = erlang:system_info(process_count),
+    ?line {proc_info, [{requested, R}, {active, A}, {pids, P}]} =
+	gen_stream:proc_info(Pid),
+    ?line NumProcs = R,
+    ?line NumProcs = A,
 
     ?line {stream_size, BinSize} = gen_stream:stream_size(Pid),
     ?line {stream_pos, 0} = gen_stream:stream_pos(Pid),
@@ -1309,11 +1322,12 @@ block_buffer_info(NumProcs, ChunkBlockSize, BinSize, Bin, BinOpts, Xfn) ->
     ?line info_chunk(Pid, BinSize, end_of_stream, BinSize, 100, Xfn),
     ?line info_chunk(Pid, BinSize, end_of_stream, BinSize, 100, Xfn),
 
-    ?line OldProcCount = erlang:system_info(process_count) - 1,
+    ?line {proc_info, [{requested, R}, {active, 0}, {pids, P}]} =
+	gen_stream:proc_info(Pid),
+
     ?line stopped = gen_stream:stop(Pid),
     ?line busy_wait_for_process_to_end(Pid, 600),
-    ?line {'EXIT', {noproc,_}} = (catch gen_stream:stream_size(Pid)),
-    ?line OldProcCount = erlang:system_info(process_count).
+    ?line {'EXIT', {noproc,_}} = (catch gen_stream:stream_size(Pid)).
 
 make_block_triplet([], Triplets, _Pos, _TotSize) ->
     lists:reverse(Triplets);
@@ -1334,6 +1348,10 @@ circ3_info(Opts, Xfn) ->
     ?line circular_info(Pid, 15, <<"678">>, Xfn),
     ?line circular_info(Pid, 18, <<"123">>, Xfn),
     ?line circular_info(Pid, 21, <<"456">>, Xfn),
+
+    ?line {proc_info, [{requested, R}, {active, R}, {pids, _P}]} =
+	gen_stream:proc_info(Pid),
+
     ?line stopped = gen_stream:stop(Pid),
     ?line busy_wait_for_process_to_end(Pid, 600),
     ?line {'EXIT', {noproc,_}} = (catch gen_stream:stream_size(Pid)).
@@ -1350,6 +1368,10 @@ circ3m_info(Opts, Xfn) ->
     ?line circular_info(Pid, 15*4, odd_bin([31,33,35]), Xfn),
     ?line circular_info(Pid, 18*4, odd_bin([1,3,5]), Xfn),
     ?line circular_info(Pid, 21*4, odd_bin([7,9,11]), Xfn),
+
+    ?line {proc_info, [{requested, R}, {active, R}, {pids, _P}]} =
+	gen_stream:proc_info(Pid),
+
     ?line stopped = gen_stream:stop(Pid),
     ?line busy_wait_for_process_to_end(Pid, 600),
     ?line {'EXIT', {noproc,_}} = (catch gen_stream:stream_size(Pid)).
@@ -1369,6 +1391,10 @@ circ4_info(Opts, Xfn) ->
     ?line circular_info(Pid, 32, <<"3451">>, Xfn),
     ?line circular_info(Pid, 36, <<"2345">>, Xfn),
     ?line circular_info(Pid, 40, <<"1234">>, Xfn),
+
+    ?line {proc_info, [{requested, R}, {active, R}, {pids, _P}]} =
+	gen_stream:proc_info(Pid),
+
     ?line stopped = gen_stream:stop(Pid),
     ?line busy_wait_for_process_to_end(Pid, 600),
     ?line {'EXIT', {noproc,_}} = (catch gen_stream:stream_size(Pid)).
@@ -1388,6 +1414,10 @@ circ4m_info(Opts, Xfn) ->
     ?line circular_info(Pid, 32*4, odd_bin([5,7,9,1]), Xfn),
     ?line circular_info(Pid, 36*4, odd_bin([3,5,7,9]), Xfn),
     ?line circular_info(Pid, 40*4, odd_bin([1,3,5,7]), Xfn),
+
+    ?line {proc_info, [{requested, R}, {active, R}, {pids, _P}]} =
+	gen_stream:proc_info(Pid),
+
     ?line stopped = gen_stream:stop(Pid),
     ?line busy_wait_for_process_to_end(Pid, 600),
     ?line {'EXIT', {noproc,_}} = (catch gen_stream:stream_size(Pid)).
@@ -1407,6 +1437,10 @@ circ8_info(Opts, Xfn) ->
     ?line circular_info(Pid, 64, <<"51234512">>, Xfn),
     ?line circular_info(Pid, 72, <<"34512345">>, Xfn),
     ?line circular_info(Pid, 80, <<"12345123">>, Xfn),
+
+    ?line {proc_info, [{requested, R}, {active, R}, {pids, _P}]} =
+	gen_stream:proc_info(Pid),
+
     ?line stopped = gen_stream:stop(Pid),
     ?line busy_wait_for_process_to_end(Pid, 600),
     ?line {'EXIT', {noproc,_}} = (catch gen_stream:stream_size(Pid)).
@@ -1426,6 +1460,10 @@ circ8m_info(Opts, Xfn) ->
     ?line circular_info(Pid, 64*4, odd_bin([9,1,3,5,7,9,1,3]), Xfn),
     ?line circular_info(Pid, 72*4, odd_bin([5,7,9,1,3,5,7,9]), Xfn),
     ?line circular_info(Pid, 80*4, odd_bin([1,3,5,7,9,1,3,5]), Xfn),
+
+    ?line {proc_info, [{requested, R}, {active, R}, {pids, _P}]} =
+	gen_stream:proc_info(Pid),
+
     ?line stopped = gen_stream:stop(Pid),
     ?line busy_wait_for_process_to_end(Pid, 600),
     ?line {'EXIT', {noproc,_}} = (catch gen_stream:stream_size(Pid)).
@@ -1440,6 +1478,10 @@ circ_f14_info(Opts, Xfn) ->
     ?line circular_info(Pid,  42, <<"efghijklmnopqr">>, Xfn),
     ?line circular_info(Pid,  56, <<"stuvwxyz\n12345">>, Xfn),
     ?line circular_info(Pid,  70, <<"67890\nabcdefgh">>, Xfn),
+
+    ?line {proc_info, [{requested, R}, {active, R}, {pids, _P}]} =
+	gen_stream:proc_info(Pid),
+
     ?line stopped = gen_stream:stop(Pid),
     ?line busy_wait_for_process_to_end(Pid, 600),
     ?line {'EXIT', {noproc,_}} = (catch gen_stream:stream_size(Pid)).
@@ -1452,6 +1494,10 @@ circ_f19_info(Opts, Xfn) ->
     ?line circular_info(Pid,  19, <<"tuvwxyz\n1234567890\n">>, Xfn),
     ?line circular_info(Pid,  38, <<"abcdefghijklmnopqrs">>, Xfn),
     ?line circular_info(Pid,  57, <<"tuvwxyz\n1234567890\n">>, Xfn),
+
+    ?line {proc_info, [{requested, R}, {active, R}, {pids, _P}]} =
+	gen_stream:proc_info(Pid),
+
     ?line stopped = gen_stream:stop(Pid),
     ?line busy_wait_for_process_to_end(Pid, 600),
     ?line {'EXIT', {noproc,_}} = (catch gen_stream:stream_size(Pid)).
@@ -1472,6 +1518,10 @@ circ_f60_info(Opts, Xfn) ->
 				    "7890\nabcdefghijklmnopqrstuv"
 				    "wxyz\n1"
 				  >>, Xfn),
+
+    ?line {proc_info, [{requested, R}, {active, R}, {pids, _P}]} =
+	gen_stream:proc_info(Pid),
+
     ?line stopped = gen_stream:stop(Pid),
     ?line busy_wait_for_process_to_end(Pid, 600),
     ?line {'EXIT', {noproc,_}} = (catch gen_stream:stream_size(Pid)).

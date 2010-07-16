@@ -94,7 +94,8 @@
 
 %% API
 -export([start/1, start/2, start_link/1, start_link/2, stop/1,
-	 next_block/1, stream_size/1, stream_pos/1, pct_complete/1]).
+	 next_block/1, stream_size/1, stream_pos/1, pct_complete/1,
+	 proc_info/1]).
 
 %% gen_server callbacks
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2,
@@ -153,6 +154,7 @@ behaviour_info(_Other) ->
 -record(gstr_state, {
 	  stream_type :: stream_type(),
 	  options = #gstr_opts{},
+	  orig_procs = [] :: list(pid()),
 	  procs = end_of_stream :: tuple(pid()) | 'end_of_stream',
 	  mod_state :: any(),   %% State of user-defined module
 	  active_proc = 1 :: non_neg_integer(),
@@ -293,6 +295,17 @@ stream_pos(Server) ->
 pct_complete(Server) ->
     gen_server:call(Server, pct_complete).
 
+%% --------------------------------------------------------------------
+%% Report the number of processes requested and the currently active
+%% processes.  (NOTE: for testing purposes only, the Pids should not
+%% be leaked out and used for other reasons.)
+%% --------------------------------------------------------------------
+-spec proc_info(pid() | {local, atom()} | {global, atom()})
+		  -> tuple(proc_info, list()).
+
+proc_info(Server) ->
+    gen_server:call(Server, proc_info).
+
 
 %%%========================================================================
 %%% gen_server callback functions
@@ -311,21 +324,22 @@ init(#gstr_state{mod_state={stop, Reason}}) ->
     {stop, Reason};
 init(#gstr_state{mod_state=ModState} = State) ->
     Procs = launch_procs(setup_proc_args(State)),
+    NewState = State#gstr_state{orig_procs=tuple_to_list(Procs),
+				procs=Procs},
     case ModState of
 
 	%% Only behaviour streams should have a mod_state...
 	{ok, ActualModState} ->
-	    {ok, State#gstr_state{procs=Procs, mod_state=ActualModState}};
+	    {ok, NewState#gstr_state{mod_state=ActualModState}};
 	{ok, ActualModState, hibernate} ->
-	    {ok, State#gstr_state{procs=Procs, mod_state=ActualModState},
+	    {ok, NewState#gstr_state{mod_state=ActualModState},
 	     hibernate};
 	{ok, ActualModState, Timeout} ->
-	    {ok, State#gstr_state{procs=Procs, mod_state=ActualModState},
+	    {ok, NewState#gstr_state{mod_state=ActualModState},
 	     Timeout};
 
 	%% All others will be undefined.
-	undefined ->
-	    {ok, State#gstr_state{procs=Procs}}
+	undefined -> {ok, NewState}
     end.
 
 setup_proc_args(#gstr_state{stream_type=ST, source_size=SS, mod_state=MS,
@@ -405,6 +419,12 @@ handle_call(pct_complete, _From,
   when is_integer(Size) ->
     {reply, {pct_complete, (Seen * 100) div Size}, State};
 
+handle_call(proc_info, _From,
+	    #gstr_state{orig_procs=Procs,
+		        options=#gstr_opts{num_procs=NP}} = State) ->
+    AP = length([P || P <- Procs, erlang:is_process_alive(P)]),
+    Reply = [{requested, NP}, {active, AP}, {pids, Procs}],
+    {reply, {proc_info, Reply}, State};
 %% If Size is not an integer, return its value every time...
 %% For example: {pct_complete, infinite}
 handle_call(pct_complete, _From, #gstr_state{source_size=Size} = State) ->
