@@ -381,6 +381,7 @@ atom open_error
 atom or
 atom ordered_set
 atom orelse
+atom os_pid
 atom os_type
 atom os_version
 atom ose_bg_proc
